@@ -43,6 +43,20 @@ class Ball{
         ctx.fill();
         ctx.stroke();
     }
+
+    collide_with(b){
+        if (this.dist(b)<this.R+b.R)
+        {
+            this.move_frame_back();
+            this.vx = b.vx;
+            this.vy = b.vy;
+        }
+    }
+
+    move_frame_back(){
+        this.x-= this.vx;
+        this.y-= this.vx;
+    }
 }
 
 var ball = new Ball(20,30,5,6)
