@@ -1,7 +1,8 @@
-var ballR = 10;
+var ballR = 3;
 var maxX = 400;
 var maxY = 400;
 var balls = [];
+
 
 class Ball{
     constructor(x,y,vx,vy, color="blue"){
@@ -49,7 +50,7 @@ class Ball{
     collide_with(b){
         if (this.dist(b)<this.R+b.R)
         {
-            console.log("COLISION!!");
+            //console.log("COLISION!!");
             this.move_frame_back();
             this.swap_vels(b);
         }
@@ -62,11 +63,12 @@ class Ball{
     }
 
     move_frame_back(){
-        this.x-= this.vx;
-        this.y-= this.vx;
+        this.x-= this.vx/2;
+        this.y-= this.vx/2;
     }
 
     swap_vels(b){
+        //the most simplistic colision velocity exchange rule
         let v = this.vx;
         this.vx = b.vx;
         b.vx = v;
@@ -75,15 +77,22 @@ class Ball{
         b.vy = v;
 
     }
+
+    real_colision_physics(b){
+        //eq from wikipedia https://en.wikipedia.org/wiki/Elastic_collision
+        //TODO
+    }
 }
 
-function createWorld(n_balls=5){
+function createWorld(n_balls=5, max_vel = 8){
     for (i=0; i<n_balls; i++){
         color = '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
-        vx = Math.floor(Math.random() * 8 - 4);
-        vy = Math.floor(Math.random() * 8 - 4);
-        x = Math.floor(Math.random()*maxX);
-        y = Math.floor(Math.random()*maxY);
+        v = Math.random() * max_vel  - max_vel/2;
+        angle = Math.random()*2*Math.PI;
+        vx = v*Math.sin(angle);
+        vy = v*Math.cos(angle);
+        x = Math.random()*maxX;
+        y = Math.random()*maxY;
         balls.push(new Ball(x,y,vx,vy, color));
     }
     console.log("total no. of  balls "+balls.length);
@@ -114,5 +123,5 @@ function animation(){
     setTimeout(animation, 20);
 }
 
-createWorld(12);
+createWorld(300);
 animation();
